@@ -1,7 +1,9 @@
 package org.gestern.gringotts.dependency;
 
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.DefaultDomain;
+import com.sk89q.worldguard.internal.platform.WorldGuardPlatform;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Bukkit;
@@ -10,15 +12,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.gestern.gringotts.Gringotts;
+import org.gestern.gringotts.Language;
+import org.gestern.gringotts.Permissions;
 import org.gestern.gringotts.accountholder.AccountHolder;
 import org.gestern.gringotts.accountholder.AccountHolderProvider;
 import org.gestern.gringotts.event.PlayerVaultCreationEvent;
 
 import java.util.UUID;
-
-import static org.gestern.gringotts.Language.LANG;
-import static org.gestern.gringotts.Permissions.CREATEVAULT_ADMIN;
-import static org.gestern.gringotts.Permissions.CREATEVAULT_WORLDGUARD;
 
 public class WorldGuardHandler implements DependencyHandler, AccountHolderProvider {
 
@@ -47,7 +47,7 @@ public class WorldGuardHandler implements DependencyHandler, AccountHolderProvid
     @Override
     public WorldGuardAccountHolder getAccountHolder(String id) {
         // FIXME use something more robust than - as world-id delimiter
-        // try explicit world+id first 
+        // try explicit world+id first
         String[] parts = id.split("-", 2);
         if (parts.length == 2) {
             WorldGuardAccountHolder wgah = getAccountHolder(parts[0], parts[1]);
@@ -58,10 +58,11 @@ public class WorldGuardHandler implements DependencyHandler, AccountHolderProvid
         }
 
         // try bare id in all worlds
+        WorldGuardPlatform worldguardPlatform = WorldGuard.getInstance().getPlatform();
         for (World world : Bukkit.getWorlds()) {
-            RegionManager worldManager = plugin.getRegionManager(world);
+            RegionManager worldManager = worldguardPlatform.getRegionContainer().get(worldguardPlatform.getWorldByName(world.getName()));
 
-            if (worldManager.hasRegion(id)) {
+            if (worldManager != null && worldManager.hasRegion(id)) {
                 ProtectedRegion region = worldManager.getRegion(id);
 
                 return new WorldGuardAccountHolder(world.getName(), region);
@@ -85,14 +86,15 @@ public class WorldGuardHandler implements DependencyHandler, AccountHolderProvid
             return null;
         }
 
-        RegionManager manager = plugin.getRegionManager(w);
+        WorldGuardPlatform worldguardPlatform = WorldGuard.getInstance().getPlatform();
+        RegionManager worldManager = worldguardPlatform.getRegionContainer().get(worldguardPlatform.getWorldByName(w.getName()));
 
-        if (manager == null) {
+        if (worldManager == null) {
             return null;
         }
 
-        if (manager.hasRegion(id)) {
-            ProtectedRegion region = manager.getRegion(id);
+        if (worldManager.hasRegion(id)) {
+            ProtectedRegion region = worldManager.getRegion(id);
 
             return new WorldGuardAccountHolder(world, region);
         }
@@ -109,8 +111,8 @@ public class WorldGuardHandler implements DependencyHandler, AccountHolderProvid
 
             if ("region".equals(event.getType())) {
                 Player player = event.getCause().getPlayer();
-                if (!CREATEVAULT_WORLDGUARD.allowed(player)) {
-                    player.sendMessage(LANG.plugin_worldguard_noVaultPerm);
+                if (!Permissions.CREATEVAULT_WORLDGUARD.allowed(player)) {
+                    player.sendMessage(Language.LANG.plugin_worldguard_noVaultPerm);
 
                     return;
                 }
@@ -128,7 +130,7 @@ public class WorldGuardHandler implements DependencyHandler, AccountHolderProvid
                     owner = getAccountHolder(world, id);
                 }
 
-                if (owner != null && (owner.region.hasMembersOrOwners() || CREATEVAULT_ADMIN.allowed(player))) {
+                if (owner != null && (owner.region.hasMembersOrOwners() || Permissions.CREATEVAULT_ADMIN.allowed(player))) {
                     DefaultDomain regionOwners = owner.region.getOwners();
                     if (regionOwners.contains(player.getName())) {
                         event.setOwner(owner);
