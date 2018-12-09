@@ -1,0 +1,107 @@
+name: Gringotts
+authors: [jasticE, squidicuz, eXeC64, nikosgram13]
+website: https://github.com/MinecraftWars/Gringotts
+
+version: ${version}
+main: org.gestern.gringotts.Gringotts
+load: STARTUP
+database: true
+
+api-version: 1.13
+
+awareness:
+- !@UTF8
+
+depend: []
+softdepend:
+  - Vault
+  - WorldGuard
+#loadbefore: [Vault]
+
+commands:
+  balance:
+    description: Shows your vault balance
+    usage: /balance
+    aliases: money
+  money:
+    aliases: [money, m]
+    description: Money actions
+    usage: |
+      /money
+      /money pay <amount> <player>
+  moneyadmin:
+    aliases: [moneyadm, mad]
+    description: Gringotts admin actions
+    usage: |
+      /moneyadm add <amount> <player>
+      /moneyadm rm <amount> <player>
+      /moneyadm b <player>
+    permission: gringotts.admin
+  gringotts:
+    aliases: [grin]
+    usage: |
+      /gringotts reload
+    permission: gringotts.admin
+
+permissions:
+  gringotts.createvault:
+    description: Create vaults
+    default: true
+    children:
+      gringotts.createvault.player: true
+      gringotts.createvault.faction: true
+      gringotts.createvault.town: true
+      gringotts.createvault.nation: true
+
+  gringotts.createvault.admin:
+    description: Create vault for other players/accounts
+    default: op
+  gringotts.createvault.player:
+    description: Create player vaults
+    default: true
+  gringotts.createvault.faction:
+    description: Create faction vaults (Factions only)
+    default: true
+  gringotts.createvault.town:
+    description: Create town vaults (Towny only)
+    default: true
+  gringotts.createvault.nation:
+    description: Create nation vaults (Towny only)
+    default: true
+  gringotts.createvault.worldguard:
+    description: Create region vaults (WorldGuard only)
+    default: true
+
+  gringotts.usevault:
+    description: Use any type of vault
+    default: true
+    children:
+      gringotts.usevault.inventory: true
+      gringotts.usevault.enderchest: true
+  gringotts.usevault.inventory:
+    description: Use player's inventory as 'vault'
+    default: true
+  gringotts.usevault.enderchest:
+    description: Use player's enderchest inventory as vault
+    default: true
+
+  gringotts.command:
+    description: Allow all user transaction commands
+    default: true
+    children:
+      gringotts.transfer: true
+      gringotts.command.withdraw: true
+      gringotts.command.deposit: true
+  gringotts.transfer:
+    description: Allow money transfer commands
+    default: true
+  gringotts.command.withdraw:
+    description: Allow withdrawal of money from chest storage to inventory.
+    default: true
+  gringotts.command.deposit:
+    description: Allow deposit of money to chest storage from inventory.
+    default: true
+
+  gringotts.admin:
+    description: Use all /moneyadmin commands
+    default: op
