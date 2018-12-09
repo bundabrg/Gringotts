@@ -1,0 +1,48 @@
+<assembly xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+    <id>multiversion</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <moduleSets>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>org.gestern.gringotts:Gringotts</include>
+            </includes>
+
+            <binaries>
+                <includeDependencies>false</includeDependencies>
+                <unpack>true</unpack>
+            </binaries>
+        </moduleSet>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>org.gestern.gringotts:Gringotts-v1.12-R1</include>
+            </includes>
+
+            <binaries>
+                <includeDependencies>false</includeDependencies>
+                <outputDirectory>MVP/1_12_R1</outputDirectory>
+                <unpack>true</unpack>
+            </binaries>
+        </moduleSet>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>org.gestern.gringotts:Gringotts-WG-v7.0.0-S1</include>
+            </includes>
+
+            <binaries>
+                <includeDependencies>false</includeDependencies>
+                <outputDirectory>MVP/WG_7_0_0_S1</outputDirectory>
+                <unpack>true</unpack>
+            </binaries>
+        </moduleSet>
+    </moduleSets>
+
+
+</assembly>

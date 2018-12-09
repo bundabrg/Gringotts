@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>Gringotts-parent</artifactId>
+        <groupId>org.gestern.gringotts</groupId>
+        <version>3.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>Gringotts-v1.12-R1</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Local Dependencies -->
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>Gringotts-latest</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- MultiVersion Plugin -->
+        <dependency>
+            <groupId>au.com.grieve.multi_version_plugin</groupId>
+            <artifactId>MultiVersionPlugin</artifactId>
+            <version>1.2</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- 3rd Party Dependencies -->
+        <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-legacy</artifactId>
+            <version>6.2</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>*</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>*</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.0</version>
+
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/maven/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <relocations>
+                                <!-- Multiversion Plugin -->
+                                <relocation>
+                                    <pattern>au.com.grieve.multi_version_plugin</pattern>
+                                    <shadedPattern>${project.parent.groupId}.multi_version_plugin</shadedPattern>
+                                </relocation>
+                                <!-- MCStats -->
+                                <relocation>
+                                    <pattern>org.mcstats</pattern>
+                                    <shadedPattern>org.gestern.mcstats</shadedPattern>
+                                </relocation>
+                                <!-- BStats -->
+                                <!--<relocation>-->
+                                <!--<pattern>org.bstats</pattern>-->
+                                <!--<shadedPattern>${project.parent.groupId}.bstats</shadedPattern>-->
+                                <!--</relocation>-->
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>
