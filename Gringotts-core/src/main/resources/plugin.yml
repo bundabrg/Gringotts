@@ -2,7 +2,7 @@ name: Gringotts
 authors: [jasticE, squidicuz, eXeC64, nikosgram13]
 website: https://github.com/MinecraftWars/Gringotts
 
-version: 3.0.0-preview.1
+version: 3.0.0-preview.2
 main: org.gestern.gringotts.Gringotts
 load: STARTUP
 database: true
