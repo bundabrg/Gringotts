@@ -1,6 +1,10 @@
 Gringotts Changelog
 ===================
 
+v2.11.2
+----
+* Updated TownyAPI Dependency
+
 v2.9
 ----
 * DEPENDS ON JAVA 8. If your server is not on Java 8 yet, you should upgrade, or ask your service provider to upgrade. Java 7 isn't supported anymore by Oracle.

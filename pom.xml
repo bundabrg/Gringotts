@@ -6,6 +6,7 @@
     <version>2.11.1-SNAPSHOT</version>
 
     <build>
+        <defaultGoal>clean install</defaultGoal>
         <resources>
             <resource>
                 <directory>${basedir}</directory>
@@ -97,11 +98,10 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>towny</groupId>
-            <artifactId>towny</artifactId>
-            <version>0.90.0.0</version>
+            <groupId>com.palmergames.bukkit.towny</groupId>
+            <artifactId>Towny</artifactId>
+            <version>0.95.2.3</version>
             <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>
@@ -215,6 +215,10 @@
         <repository>
             <id>znode</id>
             <url>http://repo.zno.de/artifactory/repo/</url>
+        </repository>
+        <repository>
+            <id>bundabrg-repo</id>
+            <url>https://repo.worldguard.com.au/repository/maven-public/</url>
         </repository>
         <repository>
             <id>project.local</id>
