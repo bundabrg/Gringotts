@@ -1,8 +1,10 @@
 package org.gestern.gringotts.currency;
 
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.gestern.gringotts.Util;
 
 import java.util.*;
 
@@ -154,9 +156,12 @@ public class GringottsCurrency {
                 b.append(String.format(formatString, displayVal, displayVal == 1.0 ? name : namePlural));
             }
 
+            // reset color at the end
+            b.append(ChatColor.RESET);
+
             return b.toString();
 
-        } else return String.format(formatString, value, value == 1.0 ? name : namePlural);
+        } else return String.format(formatString, value, value == 1.0 ? name : namePlural) + ChatColor.RESET;
 
     }
 

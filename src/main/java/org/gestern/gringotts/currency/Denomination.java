@@ -34,8 +34,8 @@ public class Denomination implements Comparable<Denomination> {
         this.key = key;
         this.value = value;
 
-        this.unitName = unitName + ChatColor.RESET;
-        this.unitNamePlural = unitNamePlural + ChatColor.RESET;
+        this.unitName = unitName;
+        this.unitNamePlural = unitNamePlural;
     }
 
     @Override
